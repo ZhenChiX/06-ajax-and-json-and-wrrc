@@ -41,11 +41,11 @@ Article.prototype.toHtml = function () {
 
 //
 Article.loadAll = articleData => {
-  // debugger;
-  articleData.sort((a, b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
-  articleData.forEach(articleObject => Article.all.push(new Article(articleObject)))
+  articleData.sort((a, b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
+  articleData.forEach(articleObject => Article.all.push(new Article(articleObject)));
   articleView.initIndexPage();
+  // Article.loadAll();
 }
 
 // REVIEW: This function will retrieve the data from either a local or remote source, and process it, then hand off control to the View.
@@ -54,19 +54,8 @@ Article.fetchAll = () => {
   if (localStorage.rawData) {
     let storeBlogs = JSON.parse(localStorage.rawData);
     Article.loadAll(storeBlogs);
+    // articleView.initIndexPage();
 
-    // } else {
-    //   $.getJSON('data/hackerIpsum.json').then(
-    //     function (data) {
-    //       data.forEach(function (hackerObjects) {
-    //         Article.all.push(new Ariticle(hackerObjects));
-    //       });
-    //       Article.all.forEach(function (article) {
-    //         $('#articles').append(article.toHtml());
-    //         Article.loadAll();
-    //         articleView.initIndexPage();
-    //       });
-    //     })
   }
   else {
     $.ajax({
@@ -75,9 +64,10 @@ Article.fetchAll = () => {
       headers: {},
       success: function (data, message, xhr) {
         localStorage.setItem('rawData', JSON.stringify(data));
+        // articleView.initIndexPage();
+        
       }
-    })
+    });
+    Article.loadAll();
   }
-  Article.loadAll();
-
 }
